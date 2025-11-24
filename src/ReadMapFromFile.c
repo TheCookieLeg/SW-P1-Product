@@ -9,9 +9,10 @@
 
 #define MINIMUM_WAREHOUSE_SIZE 3
 
-int** CreateGridMap() {
-    int x = 0;
-    int y = 0;
+int** CreateGridMap(int* px, int* py) {
+
+    int x = *px;
+    int y = *py;
     FILE* gridFile = fopen("TextFiles/GridMap.txt", "r");
     if (gridFile == NULL) { // Checks if the compiler can find the file
         perror("File could not be found. Try again");
@@ -19,11 +20,22 @@ int** CreateGridMap() {
     }
 
     GetWarehouseSize(gridFile, &x, &y);
-    printf("x: %d\ny: %d", x, y);
+    printf("x: %d\ny: %d\n", x, y);
+
+    int** grid = calloc(y, sizeof(int*));
+    if (!grid) { perror("malloc"); exit(EXIT_FAILURE); }
+
+    for (int i = 0; i < y; i++) {
+        grid[i] = calloc(x, sizeof(int));  // calloc automatically sets all values to 0
+        if (!grid[i]) { perror("malloc"); exit(EXIT_FAILURE); }
+    }
+
+    PrintGrid(y, x, grid);
 
 
     fclose(gridFile);
-    return 0;
+
+    return grid;
 }
 
 void GetWarehouseSize(FILE* file, int* x, int* y) {
@@ -41,4 +53,17 @@ void GetWarehouseSize(FILE* file, int* x, int* y) {
         fprintf(stderr, "Warehouse too small: Size of warehouse must be at least 3 x 3\n");
         exit(EXIT_FAILURE);
     }
+}
+
+void PrintGrid(int y, int x ,int **grid) {
+    for (int i = 0; i < y; i++) {
+        for (int j = 0; j < x; j++) {
+            printf("%d ", grid[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void DeleteGrid(int **grid) {
+
 }
