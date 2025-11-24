@@ -6,7 +6,11 @@ int x = 0, y = 0;
 
 int main(void) {
 
-    CreateGridMap(&x, &y);
+     int** grid = CreateGridMap(&x, &y);
 
+
+
+
+    DeleteGrid(y, x, grid);
     return 0;
 }

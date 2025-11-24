@@ -13,7 +13,9 @@ int** CreateGridMap(int* px, int* py) {
 
     int x = *px;
     int y = *py;
-    FILE* gridFile = fopen("TextFiles/GridMap.txt", "r");
+
+    FILE* gridFile = fopen("TextFiles/GridMap.txt", "r"); // Reads our input file
+
     if (gridFile == NULL) { // Checks if the compiler can find the file
         perror("File could not be found. Try again");
         exit(EXIT_FAILURE);
@@ -22,13 +24,14 @@ int** CreateGridMap(int* px, int* py) {
     GetWarehouseSize(gridFile, &x, &y);
     printf("x: %d\ny: %d\n", x, y);
 
-    int** grid = calloc(y, sizeof(int*));
+    int** grid = calloc(y, sizeof(int*)); // This creates all the rows (vertical)
     if (!grid) { perror("malloc"); exit(EXIT_FAILURE); }
 
     for (int i = 0; i < y; i++) {
-        grid[i] = calloc(x, sizeof(int));  // calloc automatically sets all values to 0
+        grid[i] = calloc(x, sizeof(int)); // Then for each row, x columns are created, giving us a 2D array
         if (!grid[i]) { perror("malloc"); exit(EXIT_FAILURE); }
     }
+
 
     PrintGrid(y, x, grid);
 
@@ -64,6 +67,9 @@ void PrintGrid(int y, int x ,int **grid) {
     }
 }
 
-void DeleteGrid(int **grid) {
-
+void DeleteGrid(int y, int x, int **grid) {
+    for (int i = 0; i < x; i++) {
+        free(grid[i]);
+    }
+    free(grid);
 }
