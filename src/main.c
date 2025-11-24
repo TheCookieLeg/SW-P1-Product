@@ -2,6 +2,6 @@
 
 int main(void) {
     printf("Hello, World!\n");
-    printf("Bawi drikekr booster \n");
+    printf("Bawi spiser hesterfødder \n");
     return 0;
 }
