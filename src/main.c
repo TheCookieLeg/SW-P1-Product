@@ -1,7 +1,10 @@
 #include <stdio.h>
 
+#include "ReadMapFromFile.h"
+
 int main(void) {
-    printf("Hello, World!\n");
-    printf("Example branch here\n");
+
+    CreateGridMap();
+
     return 0;
 }
