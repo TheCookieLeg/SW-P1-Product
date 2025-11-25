@@ -11,6 +11,10 @@ int main(void) {
 
     CreateWindow();
 
+    // EKSMPEL PÅ ROBOT
+    Robot robot = CreateRobot(1, 0, 0, 6, 6);
+
+
 
     DeleteGrid(y, x, grid);
     return 0;
