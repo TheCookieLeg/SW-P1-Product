@@ -11,6 +11,7 @@ int main(void) {
     printf("x: %d, y: %d", x, y);
     CreateWindow(x, y, grid);
 
+
     DeleteGrid(y, x, grid);
     return 0;
 }

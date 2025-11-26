@@ -5,8 +5,12 @@
 
 #include "CreateVisualMap.h"
 
-#define GRID_SIZE 75
-
+/**
+ * Creates a GUI window to visualize the grid map
+ * @param x The size of the grid on the x-axis
+ * @param y The size of the grid on the y-axis
+ * @param grid A 2D array of integers
+ */
 void CreateWindow(int x, int y, int** grid) {
     InitWindow(GRID_SIZE * x, GRID_SIZE * y, "Robot Simulation");
 
@@ -31,6 +35,11 @@ void CreateWindow(int x, int y, int** grid) {
     CloseWindow();
 }
 
+/**
+ * The function takes a number and converts it into a color struct, which is then returned
+ * @param x A number from the gridmap
+ * @return Returns a color struct
+ */
 struct Color NumberToColor(int x) {
 
     switch (x) {
