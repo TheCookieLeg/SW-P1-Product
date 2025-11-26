@@ -106,7 +106,12 @@ void FillGridFromFile(FILE* file, int y, int x, int **grid) {
         } else {
             if (row < y && col < x) { // Makes sure we dont go out of bounds
                 grid[row][col] = c - '0';  // Converts a character into an int using ASCII code. Only works for digits, so 0-9
+                if (grid[row][col] > 9) {
+                    perror("An invalid character has been used in the textfile. Make sure only numbers 0-9 are used.");
+                    exit(EXIT_FAILURE);
+                }
                 col++;
+
             } else {
                 perror("Program went out of bounds while trying to read text file. Check if text file is correct");
                 exit(EXIT_FAILURE);

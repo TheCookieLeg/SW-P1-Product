@@ -6,7 +6,7 @@
 #include "CreateVisualMap.h"
 
 void CreateWindow() {
-    InitWindow(800, 450, "raylib [core] example - basic window");
+    InitWindow(1280, 720, "Robot Simulation");
 
     while (!WindowShouldClose())
     {
