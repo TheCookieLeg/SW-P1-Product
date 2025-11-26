@@ -9,6 +9,12 @@
 
 #define MINIMUM_WAREHOUSE_SIZE 3
 
+/**
+ * Creates a grid map given the size of the grid map
+ * @param px A pointer to the x-variable
+ * @param py A pointer to the y-variable
+ * @return A 2D array of integers
+ */
 int** CreateGridMap(int* px, int* py) {
 
     FILE* gridFile = fopen("TextFiles/GridMap.txt", "r"); // Reads our input file
