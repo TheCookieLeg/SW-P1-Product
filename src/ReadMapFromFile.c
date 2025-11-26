@@ -11,9 +11,6 @@
 
 int** CreateGridMap(int* px, int* py) {
 
-    int x = *px;
-    int y = *py;
-
     FILE* gridFile = fopen("TextFiles/GridMap.txt", "r"); // Reads our input file
 
     if (gridFile == NULL) { // Checks if the compiler can find the file
@@ -21,19 +18,19 @@ int** CreateGridMap(int* px, int* py) {
         exit(EXIT_FAILURE);
     }
 
-    GetWarehouseSize(gridFile, &x, &y);
-    printf("x: %d\ny: %d\n", x, y);
+    GetWarehouseSize(gridFile, px, py);
+    printf("x: %d\ny: %d\n", *px, *py); //TBD
 
-    int** grid = calloc(y, sizeof(int*)); // This creates all the rows (vertical)
+    int** grid = calloc(*py, sizeof(int*)); // This creates all the rows (vertical)
     if (!grid) { perror("malloc"); exit(EXIT_FAILURE); }
 
-    for (int i = 0; i < y; i++) {
-        grid[i] = calloc(x, sizeof(int)); // Then for each row, x columns are created, giving us a 2D array
+    for (int i = 0; i < *py; i++) {
+        grid[i] = calloc(*px, sizeof(int)); // Then for each row, x columns are created, giving us a 2D array
         if (!grid[i]) { perror("malloc"); exit(EXIT_FAILURE); }
     }
 
-    FillGridFromFile(gridFile, y, x, grid);
-    PrintGrid(y, x, grid);
+    FillGridFromFile(gridFile, *py, *px, grid);
+    PrintGrid(*py, *px, grid);
 
 
     fclose(gridFile);
@@ -41,13 +38,12 @@ int** CreateGridMap(int* px, int* py) {
     return grid;
 }
 
-/*
- *  GetWareHouseSize(FILE*, int*, int*)
- *  This function reads the first two numbers in the text file
- *  It then saves this into the x and y variables that are passed as pointers to the function
- *  It also looks at the numbers it receives. If strtol() returns 0, it means that the char could not be converted to an int
- *  And if one of the numbers are smaller than 3, it returns an error, as we want the grid to be at least 3x3
-*/
+/**
+ * Sets the x and y to the size of the warehouse
+ * @param file File to read a gridmap from
+ * @param x How many elements are on the x-axis. Must be greater than 2
+ * @param y How many elements are on the y-axis. Must be greater than 2
+ */
 void GetWarehouseSize(FILE* file, int* x, int* y) {
     char cX[4], cY[4]; // This makes it possible for a warehouse size of 9999 x 9999
     fscanf(file, "%s %s", cX, cY); // Scans the first two integers as strings
@@ -65,10 +61,12 @@ void GetWarehouseSize(FILE* file, int* x, int* y) {
     }
 }
 
-/*
- *  This just prints out the grid to the console
- *  Mostly used for testing and wont be relevant for the final program
-*/
+/**
+ * Prints the 2D array to the console
+ * @param y The size of the grid on the y-axis
+ * @param x The size of the grid on the x-axis
+ * @param grid A 2D array of integers
+ */
 void PrintGrid(int y, int x ,int **grid) {
     for (int i = 0; i < y; i++) {
         for (int j = 0; j < x; j++) {
@@ -78,10 +76,12 @@ void PrintGrid(int y, int x ,int **grid) {
     }
 }
 
-/*
- *  When using malloc, it is important to free up the memory that has been allocated, so we don't get a memory leak
- *  This function frees the memory
-*/
+/**
+ * Frees the grid from memory
+ * @param y The size of the grid on the y-axis
+ * @param x The size of the grid on the x-axis
+ * @param grid A 2D array of integers
+ */
 void DeleteGrid(int y, int x, int **grid) {
     for (int i = 0; i < y; i++) {
         free(grid[i]);
@@ -89,10 +89,13 @@ void DeleteGrid(int y, int x, int **grid) {
     free(grid);
 }
 
-/*
- *  This function is pivotal for the program
- *  It reads the file and fills out our 2D array with the info from the text file
-*/
+/**
+ * Reads the given file and writes it into the 2D array
+ * @param file File with the gridmap
+ * @param y The size of the grid on the y-axis
+ * @param x The size of the grid on the x-axis
+ * @param grid A 2D array of integers
+ */
 void FillGridFromFile(FILE* file, int y, int x, int **grid) {
     int row = 0, col = 0; // Used to keep track of where we are in the array
     char c;
