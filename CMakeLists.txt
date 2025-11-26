@@ -24,7 +24,9 @@ add_executable(P1_Product src/main.c
         src/CreateVisualMap.c
         src/CreateVisualMap.h
         src/RobotStruct.h
-        src/RobotStruct.c)
+        src/RobotStruct.c
+        src/movementOfRobot.c
+        src/MovementOfRobot.h)
 
 target_link_libraries(P1_Product raylib)
 
