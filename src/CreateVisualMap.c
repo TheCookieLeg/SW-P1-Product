@@ -4,6 +4,9 @@
 #include "raylib.h"
 
 #include "CreateVisualMap.h"
+#include "RobotStruct.h"
+#include "Move.h"
+
 
 /**
  * Creates a GUI window to visualize the grid map
@@ -13,6 +16,18 @@
  */
 void CreateWindow(int x, int y, int** grid) {
     InitWindow(GRID_SIZE * x, GRID_SIZE * y, "Robot Simulation");
+
+    Robot robots[] = {
+        CreateRobot(2, 0, 0, 6, 6),
+        CreateRobot(3, 10, 10, 3, 4),
+        CreateRobot(4, 10, 0, 7, 9)
+    };
+
+    for (int i = 0; i < sizeof(robots) / sizeof(Robot); i++) {
+        grid[robots[i].row][robots[i].col] = robots[i].id;
+        grid[robots[i].targetRow][robots[i].targetCol] = 8;
+    }
+
 
     while (!WindowShouldClose())
     {
@@ -29,6 +44,14 @@ void CreateWindow(int x, int y, int** grid) {
             row += GRID_SIZE;
         }
 
+
+        for (int i = 0; i < sizeof(robots) / sizeof(Robot); i++) {
+            MoveRobot(grid, y, x, &robots[i]);
+        }
+
+
+
+        Sleep(200);
         EndDrawing();
     }
 
@@ -51,6 +74,7 @@ struct Color NumberToColor(int x) {
         case 5: return YELLOW;
         case 6: return PINK;
         case 7: return ORANGE;
+        case 8: return LIGHTGRAY;
 
         default: return BLACK;
     }

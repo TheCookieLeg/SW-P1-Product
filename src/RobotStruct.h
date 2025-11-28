@@ -11,6 +11,7 @@ typedef struct Robot {
     int targetRow;  // mål-række (y)
     int targetCol;  // mål-kolonne (x)
     int active;     // aktiv =1, robot i mål =0
+    int visited[20][20];
 } Robot;
 
 

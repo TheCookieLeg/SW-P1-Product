@@ -17,7 +17,7 @@
  */
 int** CreateGridMap(int* px, int* py) {
 
-    FILE* gridFile = fopen("TextFiles/GridMap.txt", "r"); // Reads our input file
+    FILE* gridFile = fopen("../TextFiles/GridMap.txt", "r"); // Reads our input file
 
     if (gridFile == NULL) { // Checks if the compiler can find the file
         perror("File could not be found. Try again");
@@ -28,11 +28,11 @@ int** CreateGridMap(int* px, int* py) {
     printf("x: %d\ny: %d\n", *px, *py); //TBD
 
     int** grid = calloc(*py, sizeof(int*)); // This creates all the rows (vertical)
-    if (!grid) { perror("malloc"); exit(EXIT_FAILURE); }
+    if (!grid) { perror("calloc"); exit(EXIT_FAILURE); }
 
     for (int i = 0; i < *py; i++) {
         grid[i] = calloc(*px, sizeof(int)); // Then for each row, x columns are created, giving us a 2D array
-        if (!grid[i]) { perror("malloc"); exit(EXIT_FAILURE); }
+        if (!grid[i]) { perror("calloc"); exit(EXIT_FAILURE); }
     }
 
     FillGridFromFile(gridFile, *py, *px, grid);
