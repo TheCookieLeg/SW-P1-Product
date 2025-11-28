@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include<windows.h>
 
 /*
  *  AtGoal(Robot*)
@@ -31,9 +32,10 @@ int InBounds(int row, int col, int height, int width) {
  *  left, right). It only considers valid tiles:
  */
 void MoveRobot(int **grid, int height, int width, Robot *robot) {
-
     // Prevents movement attempts when the robot has already reached its target
-    if (AtGoal(robot)) return;
+    if (AtGoal(robot)) {
+        return;
+    }
 
 
     int moves[4][2] = {
@@ -64,7 +66,7 @@ void MoveRobot(int **grid, int height, int width, Robot *robot) {
         int newCol = robot->col + moves[i][1];
 
 
-        if (InBounds(newRow, newCol, height, width) && grid[newRow][newCol] == 0) {
+        if (InBounds(newRow, newCol, height, width) && (grid[newRow][newCol] == 0 || grid[newRow][newCol] == 8)) {
 
             // Manhattan distance used as a simple heuristic
             int dist = abs(robot->targetRow - newRow) + abs(robot->targetCol - newCol);
@@ -79,9 +81,14 @@ void MoveRobot(int **grid, int height, int width, Robot *robot) {
     }
 
     // Updates the robot's position with the best candidate move
+    grid[robot->row][robot->col] = 0;
+
     robot->row = bestRow;
     robot->col = bestCol;
 
+    grid[robot->row][robot->col] = robot->id;
+
+    printf("Position: (%d,%d)\n", robot->row, robot->col);
     if (AtGoal(robot))
         robot->active = 0;
 }
