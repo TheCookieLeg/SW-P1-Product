@@ -5,7 +5,7 @@
 // Opretelse af robot samt giver start og mål position
 
 Robot CreateRobot(int id, int startRow, int startCol, int targetRow, int targetCol) {
-    Robot r;
+    Robot r = {0}; // Sets everything to zero, including all elements in the visited array
     r.id = id;
 
     r.row = startRow,
