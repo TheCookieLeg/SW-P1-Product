@@ -27,15 +27,13 @@ add_executable(P1_Product src/main.c
         src/RobotStruct.c
         src/move.c
         src/move.h
-        src/Test.c
 )
 
 target_link_libraries(P1_Product raylib)
 
 
 add_executable(MoveTest
-src/Test.c
-src/move.c
+        src/move.c
 src/RobotStruct.c
 )
 target_link_libraries(P1_Product raylib)

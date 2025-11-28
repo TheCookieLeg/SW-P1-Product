@@ -30,11 +30,14 @@ int InBounds(int row, int col, int height, int width) {
  *  For each step, the robot evaluates the four neighboring tiles (up, down,
  *  left, right). It only considers valid tiles:
  */
+
+static int visited[20][20]={0};
+
 void MoveRobot(int **grid, int height, int width, Robot *robot) {
 
     // Prevents movement attempts when the robot has already reached its target
     if (AtGoal(robot)) return;
-
+    visited[robot->row][robot->col] = 1;
 
     int moves[4][2] = {
         {-1, 0},  // up
@@ -64,7 +67,8 @@ void MoveRobot(int **grid, int height, int width, Robot *robot) {
         int newCol = robot->col + moves[i][1];
 
 
-        if (InBounds(newRow, newCol, height, width) && grid[newRow][newCol] == 0) {
+        if (InBounds(newRow, newCol, height, width) && grid[newRow][newCol] == 0 &&
+!visited[newRow][newCol]) {
 
             // Manhattan distance used as a simple heuristic
             int dist = abs(robot->targetRow - newRow) + abs(robot->targetCol - newCol);
