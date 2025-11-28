@@ -11,14 +11,16 @@
  * @param y The size of the grid on the y-axis
  * @param grid A 2D array of integers
  */
-void CreateWindow(int x, int y, int** grid) {
+void CreateWindow(int x, int y, int** grid, Robot* robot) {
     InitWindow(GRID_SIZE * x, GRID_SIZE * y, "Robot Simulation");
 
     while (!WindowShouldClose())
     {
         int row = 0, col = 0;
+
         BeginDrawing();
         ClearBackground(WHITE);
+
         for (int i = 0; i < y; i++) {
             for (int j = 0; j < x; j++) {
                 DrawRectangle(col, row, GRID_SIZE, GRID_SIZE, NumberToColor(grid[i][j]));
@@ -29,11 +31,21 @@ void CreateWindow(int x, int y, int** grid) {
             row += GRID_SIZE;
         }
 
+        //  Tegn robotten
+        DrawCircle(
+            robot->col * GRID_SIZE + GRID_SIZE / 2,
+            robot->row * GRID_SIZE + GRID_SIZE / 2,
+            GRID_SIZE / 3,
+            RED
+        );
+
         EndDrawing();
     }
 
     CloseWindow();
 }
+
+
 
 /**
  * The function takes a number and converts it into a color struct, which is then returned

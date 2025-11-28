@@ -3,18 +3,14 @@
 #include "ReadMapFromFile.h"
 #include "CreateVisualMap.h"
 #include "RobotStruct.h"
-int x = 0, y = 0;
 
 int main(void) {
-
+    int x = 0, y = 0;
     int** grid = CreateGridMap(&x, &y);
-    printf("x: %d, y: %d", x, y);
-    CreateWindow(x, y, grid);
 
-    // EKSMPEL PÅ ROBOT
-    Robot robot = CreateRobot(1, 0, 0, 6, 6);
+    Robot r = CreateRobot(1, 0, 0, 6, 6);
 
-
+    CreateWindow(x, y, grid, &r);   // nu 4 argumenter
 
     DeleteGrid(y, x, grid);
     return 0;

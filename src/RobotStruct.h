@@ -5,7 +5,7 @@
 #ifndef P1_PRODUCT_ROBOTSTRUCT_H
 #define P1_PRODUCT_ROBOTSTRUCT_H
 typedef struct Robot {
-    int id;         // unikt ID
+   const int id;         // unikt ID
     int row;        // nuværende række (y)
     int col;        // nuværende kolonne (x)
     int targetRow;  // mål-række (y)
