@@ -5,16 +5,12 @@
 // Opretelse af robot samt giver start og mål position
 
 Robot CreateRobot(int id, int startRow, int startCol, int targetRow, int targetCol) {
-    Robot r;
-    r.id = id;
-
-    r.row = startRow,
-    r.col = startCol;
-
-    r.targetRow = targetRow;
-    r.targetCol = targetCol;
-
-    r.active = 1 ; // robotten er aktiv indtil den rammer ind i målet
-
-    return r;
+    return (Robot){
+        .id = id,
+        .row = startRow,
+        .col = startCol,
+        .targetRow = targetRow,
+        .targetCol = targetCol,
+        .active = 1
+    };
 }

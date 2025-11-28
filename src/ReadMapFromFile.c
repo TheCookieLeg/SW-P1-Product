@@ -17,7 +17,7 @@
  */
 int** CreateGridMap(int* px, int* py) {
 
-    FILE* gridFile = fopen("TextFiles/GridMap.txt", "r"); // Reads our input file
+    FILE* gridFile = fopen("../TextFiles/GridMap.txt", "r"); // Reads our input file
 
     if (gridFile == NULL) { // Checks if the compiler can find the file
         perror("File could not be found. Try again");
