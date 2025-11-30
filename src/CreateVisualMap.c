@@ -20,7 +20,7 @@ void CreateWindow(int x, int y, int** grid) {
     Robot robots[] = {
         CreateRobot(2, 0, 0, 6, 6),
         CreateRobot(3, 10, 10, 3, 4),
-        CreateRobot(4, 10, 0, 7, 9)
+        CreateRobot(4, 10, 0, 0, 10)
     };
 
     for (int i = 0; i < sizeof(robots) / sizeof(Robot); i++) {
