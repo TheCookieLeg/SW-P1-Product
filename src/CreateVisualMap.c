@@ -2,7 +2,7 @@
 // Created by lucas on 25-11-2025.
 //
 #include "raylib.h"
-
+#include <unistd.h>
 #include "CreateVisualMap.h"
 #include "RobotStruct.h"
 #include "Move.h"
@@ -14,7 +14,7 @@
  * @param y The size of the grid on the y-axis
  * @param grid A 2D array of integers
  */
-void CreateWindow(int x, int y, int** grid) {
+void CreateWarehouseWindow(int x, int y, int** grid) {
     InitWindow(GRID_SIZE * x, GRID_SIZE * y, "Robot Simulation");
 
     Robot robots[] = {
@@ -51,7 +51,7 @@ void CreateWindow(int x, int y, int** grid) {
 
 
 
-        Sleep(200);
+        usleep(200000);
         EndDrawing();
     }
 
