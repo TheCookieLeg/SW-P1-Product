@@ -9,7 +9,7 @@ int main(void) {
 
     int** grid = CreateGridMap(&x, &y);
     printf("x: %d, y: %d", x, y);
-    CreateWindow(x, y, grid);
+    CreateWarehouseWindow(x, y, grid);
 
 
     DeleteGrid(y, x, grid);

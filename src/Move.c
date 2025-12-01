@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 /*
  *  AtGoal(Robot*)
@@ -81,7 +82,15 @@ void MoveRobot(int **grid, int height, int width, Robot *robot) {
             }
         }
     }
-
+    if (bestRow == robot->row && bestCol == robot->col) {
+        // if bestRow and bestCol are the robots current position, it means no other moves were valid. So we reset the visited array
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                robot->visited[i][j] = 0;
+            }
+        }
+        return;
+    }
     // Updates the robot's position with the best candidate move
     grid[robot->row][robot->col] = 0;
 
