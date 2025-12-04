@@ -2,10 +2,11 @@
 // Created by lucas on 25-11-2025.
 //
 #include "raylib.h"
-#include <unistd.h>
 #include "CreateVisualMap.h"
 #include "RobotStruct.h"
 #include "Move.h"
+#include <unistd.h>
+
 
 
 /**
@@ -18,9 +19,9 @@ void CreateWarehouseWindow(int x, int y, int** grid) {
     InitWindow(GRID_SIZE * x, GRID_SIZE * y, "Robot Simulation");
 
     Robot robots[] = {
-        CreateRobot(2, 0, 0, 6, 6),
-        CreateRobot(3, 10, 10, 3, 4),
-        CreateRobot(4, 10, 0, 0, 10)
+        CreateRobot(2, 0, 0, 6, 6, x, y),
+        CreateRobot(3, 10, 10, 3, 4, x, y),
+        CreateRobot(4, 10, 0, 0, 10, x, y)
     };
 
     for (int i = 0; i < sizeof(robots) / sizeof(Robot); i++) {
@@ -51,7 +52,7 @@ void CreateWarehouseWindow(int x, int y, int** grid) {
 
 
 
-        usleep(200000);
+        usleep(SLEEP_TIME);
         EndDrawing();
     }
 
