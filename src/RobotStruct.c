@@ -4,6 +4,7 @@
 #include "RobotStruct.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 // Opretelse af robot samt giver start og mål position
 
 Robot CreateRobot(int id, int startRow, int startCol, int targetRow, int targetCol, int x, int y) {
