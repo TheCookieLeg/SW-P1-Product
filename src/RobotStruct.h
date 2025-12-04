@@ -11,11 +11,11 @@ typedef struct Robot {
     int targetRow;  // mål-række (y)
     int targetCol;  // mål-kolonne (x)
     int active;     // aktiv =1, robot i mål =0
-    int visited[20][20];
+    int** visited;
 } Robot;
 
 
 // oprettelse af robot
-Robot CreateRobot(int id, int startRow, int startCol, int targetRow, int targetCol);
+Robot CreateRobot(int id, int startRow, int startCol, int targetRow, int targetCol, int x, int y);
 
 #endif //P1_PRODUCT_ROBOTSTRUCT_H
