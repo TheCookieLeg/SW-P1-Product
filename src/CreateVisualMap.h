@@ -5,7 +5,7 @@
 #ifndef P1_PRODUCT_CREATEVISUALMAP_H
 #define P1_PRODUCT_CREATEVISUALMAP_H
 
-#define GRID_SIZE 25
+#define GRID_SIZE 50
 #define SLEEP_TIME 100000
 void CreateWarehouseWindow(int x, int y, int** grid);
 struct Color NumberToColor(int x);
