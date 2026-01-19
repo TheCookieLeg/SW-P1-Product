@@ -19,12 +19,12 @@ void CreateWarehouseWindow(int x, int y, int** grid) {
     InitWindow(GRID_SIZE * x, GRID_SIZE * y, "Robot Simulation");
 
     Robot robots[] = {
-        CreateRobot(2, 0, 0, 17, 21, x, y),
-        CreateRobot(3, 26, 27, 14, 12, x, y),
-        CreateRobot(4, 3, 21, 26, 5, x, y),
-        CreateRobot(5, 9, 6, 26, 24, x, y),
-        CreateRobot(6, 26, 2, 9, 24, x, y),
-        CreateRobot(7, 3, 5, 20, 22, x, y)
+            CreateRobot(2, 0, 0, 17, 25, x, y),
+            CreateRobot(3, 29, 0, 19, 35, x, y),
+            CreateRobot(4, 29, 12, 12, 0, x, y),
+            CreateRobot(5, 2, 39, 18, 5, x, y),
+            CreateRobot(6, 22, 15, 4, 21, x, y),
+            CreateRobot(7, 6, 9, 21, 35, x, y)
     };
 
     for (int i = 0; i < sizeof(robots) / sizeof(Robot); i++) {
