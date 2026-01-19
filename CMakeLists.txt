@@ -25,17 +25,13 @@ add_executable(P1_Product src/main.c
         src/CreateVisualMap.h
         src/RobotStruct.h
         src/RobotStruct.c
-        src/move.c
-        src/move.h
+        src/Move.c
+        src/Move.h
 )
 
 target_link_libraries(P1_Product raylib)
 
 
-add_executable(MoveTest
-        src/move.c
-src/RobotStruct.c
-)
 target_link_libraries(P1_Product raylib)
 
 add_subdirectory(src)

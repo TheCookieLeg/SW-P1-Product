@@ -98,6 +98,10 @@ void MoveRobot(int **grid, int height, int width, Robot *robot) {
     robot->col = bestCol;
 
     grid[robot->row][robot->col] = robot->id;
+    if (grid[robot->targetRow][robot->targetCol] == 0)
+    {
+        grid[robot->targetRow][robot->targetCol] = 8;
+    }
 
     if (AtGoal(robot))
         robot->active = 0;
