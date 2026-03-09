@@ -4,6 +4,8 @@
 #include <math.h>
 #include <string.h>
 
+#define MOVE_INF 999999  /* sentinel value representing an unreachably large distance */
+
 /*
  *  AtGoal(Robot*)
  *  This function checks whether the robot has reached its destination.
@@ -26,15 +28,14 @@ int InBounds(int row, int col, int height, int width) {
 }
 
 /*
- *  MoveRobot(int**, int, int, Robot*)
- *  The robot moves one tile at a time based on a simple heuristic approach.
- *  For each step, the robot evaluates the four neighboring tiles (up, down,
- *  left, right). It only considers valid tiles:
+ *  MoveRobotGreedy(int**, int, int, Robot*)
+ *  The robot moves one tile at a time based on a simple greedy heuristic.
+ *  For each step, the robot evaluates the four neighbouring tiles (up, down,
+ *  left, right) and picks the one with the smallest Manhattan distance to the
+ *  target.  A visited array prevents the robot from revisiting the same tile
+ *  within a single search attempt; it is reset whenever the robot gets stuck.
  */
-
-
-
-void MoveRobot(int **grid, int height, int width, Robot *robot) {
+void MoveRobotGreedy(int **grid, int height, int width, Robot *robot) {
 
     // Prevents movement attempts when the robot has already reached its target
     if (AtGoal(robot)) return;
@@ -49,7 +50,7 @@ void MoveRobot(int **grid, int height, int width, Robot *robot) {
 
     int bestRow = robot->row;
     int bestCol = robot->col;
-    int bestDist = 999999; // Large default value to ensure first valid move is chosen
+    int bestDist = MOVE_INF; // Large default value to ensure first valid move is chosen
 
     /*
      *  This for-loop holds  all four possible movement directions.
@@ -101,5 +102,192 @@ void MoveRobot(int **grid, int height, int width, Robot *robot) {
 
     if (AtGoal(robot))
         robot->active = 0;
+}
+
+/*
+ *  MoveRobotBFS(int**, int, int, Robot*)
+ *  Uses breadth-first search to find the shortest path from the robot's current
+ *  position to its target.  The full path is recomputed every step so that the
+ *  robot reacts to other robots blocking tiles.  BFS guarantees the shortest
+ *  unweighted path; the robot then takes only the first step of that path.
+ */
+void MoveRobotBFS(int **grid, int height, int width, Robot *robot) {
+    if (AtGoal(robot)) return;
+
+    int total = height * width;
+    int *parent  = malloc(total * sizeof(int));
+    int *queue   = malloc(total * sizeof(int));
+    int *visited = calloc(total, sizeof(int));
+
+    if (!parent || !queue || !visited) {
+        free(parent); free(queue); free(visited);
+        return;
+    }
+
+    for (int i = 0; i < total; i++) parent[i] = -1;
+
+    int startIdx = robot->row * width + robot->col;
+    int goalIdx  = robot->targetRow * width + robot->targetCol;
+
+    int head = 0, tail = 0;
+    queue[tail++] = startIdx;
+    visited[startIdx] = 1;
+
+    int moves[4][2] = {{-1,0},{1,0},{0,-1},{0,1}};
+    int found = 0;
+
+    while (head < tail && !found) {
+        int current = queue[head++];
+        if (current == goalIdx) { found = 1; break; }
+
+        int cr = current / width;
+        int cc = current % width;
+
+        for (int i = 0; i < 4; i++) {
+            int nr = cr + moves[i][0];
+            int nc = cc + moves[i][1];
+            if (!InBounds(nr, nc, height, width)) continue;
+            if (grid[nr][nc] != 0 && grid[nr][nc] != 8) continue;
+            int nIdx = nr * width + nc;
+            if (visited[nIdx]) continue;
+            visited[nIdx] = 1;
+            parent[nIdx] = current;
+            queue[tail++] = nIdx;
+        }
+    }
+
+    if (found) {
+        // Trace back from goal to find the first step after the start
+        int idx = goalIdx;
+        while (parent[idx] != startIdx && parent[idx] != -1) {
+            idx = parent[idx];
+        }
+        if (parent[idx] == startIdx) {
+            int firstRow = idx / width;
+            int firstCol = idx % width;
+            grid[robot->row][robot->col] = 0;
+            robot->row = firstRow;
+            robot->col = firstCol;
+            grid[robot->row][robot->col] = robot->id;
+            if (AtGoal(robot)) robot->active = 0;
+        }
+    }
+
+    free(parent); free(queue); free(visited);
+}
+
+/*
+ *  MoveRobotAStar(int**, int, int, Robot*)
+ *  Uses A* search with Manhattan distance as the admissible heuristic.
+ *  Like MoveRobotBFS, the full path is recomputed every step so that dynamic
+ *  obstacles (other robots) are handled correctly.  A* is typically faster than
+ *  BFS because it focuses the search towards the goal.
+ */
+void MoveRobotAStar(int **grid, int height, int width, Robot *robot) {
+    if (AtGoal(robot)) return;
+
+    int total = height * width;
+    int *g        = malloc(total * sizeof(int));
+    int *f        = malloc(total * sizeof(int));
+    int *parent   = malloc(total * sizeof(int));
+    int *inOpen   = calloc(total, sizeof(int));
+    int *inClosed = calloc(total, sizeof(int));
+
+    if (!g || !f || !parent || !inOpen || !inClosed) {
+        free(g); free(f); free(parent); free(inOpen); free(inClosed);
+        return;
+    }
+
+    for (int i = 0; i < total; i++) {
+        g[i] = MOVE_INF;
+        f[i] = MOVE_INF;
+        parent[i] = -1;
+    }
+
+    int startIdx = robot->row * width + robot->col;
+    int goalIdx  = robot->targetRow * width + robot->targetCol;
+
+    g[startIdx] = 0;
+    f[startIdx]  = abs(robot->targetRow - robot->row) + abs(robot->targetCol - robot->col);
+    inOpen[startIdx] = 1;
+
+    int moves[4][2] = {{-1,0},{1,0},{0,-1},{0,1}};
+    int found = 0;
+
+    while (1) {
+        // Find the open node with the lowest f-score
+        int current = -1, minF = MOVE_INF;
+        for (int i = 0; i < total; i++) {
+            if (inOpen[i] && f[i] < minF) {
+                minF = f[i];
+                current = i;
+            }
+        }
+        if (current == -1) break; // No path exists
+
+        if (current == goalIdx) { found = 1; break; }
+
+        inOpen[current]   = 0;
+        inClosed[current] = 1;
+
+        int cr = current / width;
+        int cc = current % width;
+
+        for (int i = 0; i < 4; i++) {
+            int nr = cr + moves[i][0];
+            int nc = cc + moves[i][1];
+            if (!InBounds(nr, nc, height, width)) continue;
+            if (grid[nr][nc] != 0 && grid[nr][nc] != 8) continue;
+            int nIdx = nr * width + nc;
+            if (inClosed[nIdx]) continue;
+
+            int tentativeG = g[current] + 1;
+            if (tentativeG < g[nIdx]) {
+                parent[nIdx] = current;
+                g[nIdx] = tentativeG;
+                f[nIdx] = tentativeG + abs(robot->targetRow - nr) + abs(robot->targetCol - nc);
+                inOpen[nIdx] = 1;
+            }
+        }
+    }
+
+    if (found) {
+        // Trace back from goal to find the first step after the start
+        int idx = goalIdx;
+        while (parent[idx] != startIdx && parent[idx] != -1) {
+            idx = parent[idx];
+        }
+        if (parent[idx] == startIdx) {
+            int firstRow = idx / width;
+            int firstCol = idx % width;
+            grid[robot->row][robot->col] = 0;
+            robot->row = firstRow;
+            robot->col = firstCol;
+            grid[robot->row][robot->col] = robot->id;
+            if (AtGoal(robot)) robot->active = 0;
+        }
+    }
+
+    free(g); free(f); free(parent); free(inOpen); free(inClosed);
+}
+
+/*
+ *  MoveRobot(int**, int, int, Robot*)
+ *  Dispatcher that calls the correct pathfinding algorithm based on the
+ *  robot's assigned AI model (robot->model).
+ */
+void MoveRobot(int **grid, int height, int width, Robot *robot) {
+    switch (robot->model) {
+        case MODEL_BFS:
+            MoveRobotBFS(grid, height, width, robot);
+            break;
+        case MODEL_ASTAR:
+            MoveRobotAStar(grid, height, width, robot);
+            break;
+        case MODEL_GREEDY:
+        default:
+            MoveRobotGreedy(grid, height, width, robot);
+            break;
+    }
 }
 

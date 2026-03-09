@@ -7,7 +7,7 @@
 #include <stdio.h>
 // Opretelse af robot samt giver start og mål position
 
-Robot CreateRobot(int id, int startRow, int startCol, int targetRow, int targetCol, int x, int y) {
+Robot CreateRobot(int id, int startRow, int startCol, int targetRow, int targetCol, int x, int y, AIModel model) {
     Robot r;
     r.id = id;
 
@@ -31,6 +31,8 @@ Robot CreateRobot(int id, int startRow, int startCol, int targetRow, int targetC
             exit(EXIT_FAILURE);
         }
     }
+
+    r.model = model;
 
     return r;
 }
